@@ -21,8 +21,8 @@ VRP VPN Cabinet — это личный кабинет для продажи п�
 Клонирование репозитория
 
 ```bash
-git clone https://github.com/yourusername/vrp-vpn-cabinet.git
-cd vrp-vpn-cabinet
+git clone https://github.com/Xelbor/VRP-VPN-Cabinet.git
+cd VRP-VPN-Cabinet
 ```
 
 Сборка и запуск через Docker
