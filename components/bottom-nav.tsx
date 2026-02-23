@@ -1,7 +1,8 @@
 "use client"
 
+import './globals.css'
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import {
   Home,
@@ -23,7 +24,7 @@ export function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
-      <div className="mx-auto max-w-md px-3 pb-4">
+      <div className="mx-auto max-w-md px-3 pb-safe">
         <div className="relative grid grid-cols-4 items-center rounded-2xl backdrop-blur-xl border border-zinc-800/40 py-2 shadow-2xl">
           <div
             className="absolute top-1 bottom-1 rounded-xl bg-white/10 transition-all duration-300"
