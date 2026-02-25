@@ -50,10 +50,6 @@ function App() {
           await viewport.mount();
           viewport.expand();
         }
-
-        if (viewport.requestFullscreen.isAvailable()) {
-          await viewport.requestFullscreen();
-        }
       } catch (error) {
         console.error('Ошибка инициализации:', error);
       }
