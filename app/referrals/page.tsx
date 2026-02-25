@@ -11,7 +11,7 @@ export default function BalancePage() {
   const textToCopy = useRef<HTMLDivElement>(null)
 
   return (
-    <motion.div className='screen' initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+    <motion.div className='root' initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
       <h2 className='font-bold text-5xl p-5 mt-5'>Рефералы</h2>
       <div className="min-h-screen text-zinc-100 p-6 z-1">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
