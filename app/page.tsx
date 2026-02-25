@@ -75,7 +75,7 @@ function App() {
                   <div className="text-zinc-400"> 
                     <div className='flex justify-between items-start'>
                       <div className='flex flex-col'>
-                        <p className="text-white text-4xl">150.0<span className='font-mono font-bold'>₽</span></p>
+                        <p className="text-white text-4xl">150.00<span className='font-mono font-bold text-3xl'>₽</span></p>
                       </div>
                     </div>
                   </div>
