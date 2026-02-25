@@ -20,7 +20,8 @@ import { DeleteButton } from "@/components/ui/delete-button";
 import { CopyButton, HandleCopyText } from "@/components/ui/copy-button";
 import { motion } from "framer-motion";
 import { Shield, Globe, KeyRound } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react';
+import { init, miniApp, viewport } from '@telegram-apps/sdk';
  
 function App() {
   const textToCopy = useRef<HTMLDivElement>(null)
@@ -35,8 +36,36 @@ function App() {
     setDevice(updatedItems);
   };
 
+  useEffect(() => {
+    const initializeTelegramSDK = async () => {
+      try {
+        await init();
+
+        if (miniApp.ready.isAvailable()) {
+          await miniApp.ready();
+          console.log('Mini App готово');
+        }
+
+        if (viewport.mount.isAvailable()) {
+          await viewport.mount();
+          viewport.expand();
+        }
+
+        if (viewport.requestFullscreen.isAvailable()) {
+          await viewport.requestFullscreen();
+        }
+      } catch (error) {
+        console.error('Ошибка инициализации:', error);
+      }
+    };
+
+    initializeTelegramSDK();
+  }, []);
+
+  
+
   return (
-    <motion.div className='screen' initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+    <motion.div id='root' className='root' initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
       <h2 className='font-bold text-5xl p-5 mt-5'>Главная</h2>
       <div className="min-h-screen text-zinc-100 p-6 z-1">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -48,7 +77,7 @@ function App() {
                       Мой баланс
                   </CardTitle>
                   <div className="text-zinc-400"> 
-                    <div className='flex justify-between items-center'>
+                    <div className='flex justify-between items-start'>
                       <div className='flex flex-col'>
                         <p className="text-white text-4xl">150.00<span className='font-mono font-bold'>₽</span></p>
                       </div>
@@ -224,7 +253,6 @@ function App() {
                           </Button>
                         </DrawerClose>
                       </DrawerFooter>
-
                     </div>
                   </DrawerContent>
                 </Drawer>

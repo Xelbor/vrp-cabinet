@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { BottomNav } from "@/components/bottom-nav"
 import { Header } from '@/components/header'
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -35,6 +36,10 @@ export default function RootLayout({
           </div>
 
           <BottomNav />
+          <Script
+            src="https://telegram.org/js/telegram-web-app.js?59"
+            strategy="afterInteractive"
+          />
       </body>
     </html>
   );
