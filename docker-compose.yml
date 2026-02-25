@@ -1,0 +1,14 @@
+services:
+  cabinet:
+    build: .
+    container_name: vrp-cabinet
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - bot_network
+
+networks:
+  bot_network:
+    external: true
+    driver: bridge
