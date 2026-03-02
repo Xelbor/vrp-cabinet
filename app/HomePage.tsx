@@ -10,29 +10,38 @@ import { motion } from "framer-motion";
 import { fetchHome, deleteDevice } from '@/lib/services/home_service';
 import { formatDate, getTimeLeft } from '@/lib/date';
 import { useEffect, useState } from 'react';
-import { init, initData } from '@tma.js/sdk';
- 
+
 export default function HomePageClient() {
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
 
+  window.Telegram?.WebApp?.ready();
+
+  const init_data = window.Telegram?.WebApp?.initDataUnsafe
+  const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
+
   useEffect(() => {
     async function initApp() {
-      init();
+      if (!window.Telegram?.WebApp) return;
 
-      const tgUser = initData.user();
-      const id = tgUser?.id?.toString();
-      if (!id) return;
+      const tg = window.Telegram.WebApp;
+      tg.ready();
 
-      setUserId(id);
+      const initDataRaw = tg.initData; // <-- ВАЖНО
+      const user = tg.initDataUnsafe?.user;
+
+      if (!initDataRaw) {
+        console.error("No initData");
+        return;
+      }
 
       try {
         const authResponse = await fetch('/api/auth/telegram', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            initData: initData.raw
+            initData: initDataRaw
           })
         });
 
@@ -40,7 +49,7 @@ export default function HomePageClient() {
 
         localStorage.setItem('jwt', token);
 
-        const result = await fetchHome(id, token);
+        const result = await fetchHome(String(user?.id), token);
 
         setData({
           ...result,
