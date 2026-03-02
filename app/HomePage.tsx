@@ -22,20 +22,21 @@ export default function HomePageClient() {
   const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const tg = window.Telegram?.WebApp;
+    if (!tg) return;
+
+    tg.ready();
+
+    const initDataRaw = tg.initData;
+
+    if (!initDataRaw) {
+      console.error("No initData");
+      return;
+    }
+
     async function initApp() {
-      if (!window.Telegram?.WebApp) return;
-
-      const tg = window.Telegram.WebApp;
-      tg.ready();
-
-      const initDataRaw = tg.initData; // <-- ВАЖНО
-      const user = tg.initDataUnsafe?.user;
-
-      if (!initDataRaw) {
-        console.error("No initData");
-        return;
-      }
-
       try {
         const authResponse = await fetch('/api/auth/telegram', {
           method: 'POST',
@@ -49,14 +50,7 @@ export default function HomePageClient() {
 
         localStorage.setItem('jwt', token);
 
-        const result = await fetchHome(String(user?.id), token);
-
-        setData({
-          ...result,
-          formattedDate: formatDate(result.end_date),
-          daysLeft: getTimeLeft(result.end_date),
-        });
-
+        // дальше твоя логика
       } catch (e) {
         console.error(e);
       } finally {
