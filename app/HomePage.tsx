@@ -94,7 +94,7 @@ export default function HomePageClient() {
 
   return (
     <motion.div id='root' className='root' initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-      <h2 className='font-bold text-5xl p-5 mt-5'>Главная - {process.env.NEXT_PUBLIC_BASE_URL}</h2>
+      <h2 className='font-bold text-5xl p-5 mt-5'>Главная</h2>
       <div className="min-h-screen text-zinc-100 p-6 z-1 flex justify-center">
         <div className="w-full md:max-w-[1200px]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
