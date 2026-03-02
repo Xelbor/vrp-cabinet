@@ -16,11 +16,6 @@ export default function HomePageClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
 
-  window.Telegram?.WebApp?.ready();
-
-  const init_data = window.Telegram?.WebApp?.initDataUnsafe
-  const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
-
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
