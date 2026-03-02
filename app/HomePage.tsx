@@ -34,10 +34,12 @@ export default function HomePageClient() {
 
   function getToken() {
     if (typeof window === "undefined") return null;
+    console.log("false");
     return localStorage.getItem("jwt");
   }
 
   const token = getToken();
+  console.log(token);
 
   useEffect(() => {
     init();
