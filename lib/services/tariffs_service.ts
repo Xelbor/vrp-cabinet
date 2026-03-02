@@ -1,5 +1,5 @@
 export async function buyKey(userId: string, tariff: string, token: string) {
-  const response = await fetch(`api/buykey`, {
+  const response = await fetch(`/api/buykey`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

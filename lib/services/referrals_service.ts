@@ -1,5 +1,5 @@
 export async function fetchReferrals(userId: string, token: string) {
-  const response = await fetch(`api/refferals`, {
+  const response = await fetch(`/api/refferals`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

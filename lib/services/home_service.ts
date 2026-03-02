@@ -1,5 +1,5 @@
 export async function fetchHome(userId: string, token: string) {
-  const response = await fetch(`api/home`, {
+  const response = await fetch(`/api/home`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json",
@@ -16,7 +16,7 @@ export async function fetchHome(userId: string, token: string) {
 }
 
 export async function deleteDevice(userId: string, hwid: string, token: string) {
-  const response = await fetch(`api/delete_hwid_user`, {
+  const response = await fetch(`/api/delete_hwid_user`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json",

@@ -1,5 +1,5 @@
 export async function fetchBalance(userId: string, token: string) {
-  const response = await fetch(`api/balance`, {
+  const response = await fetch(`/api/balance`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -16,7 +16,7 @@ export async function fetchBalance(userId: string, token: string) {
 }
 
 export async function сhargeBalance(userId: string, amount: number, method: string, token: string) {
-  const response = await fetch(`api/chargeBalance`, {
+  const response = await fetch(`/api/chargeBalance`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
