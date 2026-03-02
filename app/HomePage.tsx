@@ -17,40 +17,16 @@ export default function HomePageClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
 
-  async function authenticate() {
-    const response = await fetch('/api/auth/telegram', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        initData: initData.raw
-      })
-    });
-  
-    const { token } = await response.json();
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('jwt', token);
-    }
-  }
-
-  function getToken() {
-    if (typeof window === "undefined") return null;
-    console.log("false");
-    return localStorage.getItem("jwt");
-  }
-
-  const token = getToken();
-  console.log(token);
-
   useEffect(() => {
     async function initApp() {
       init();
-    
+
       const tgUser = initData.user();
       const id = tgUser?.id?.toString();
       if (!id) return;
-    
+
       setUserId(id);
-    
+
       try {
         const authResponse = await fetch('/api/auth/telegram', {
           method: 'POST',
@@ -59,34 +35,34 @@ export default function HomePageClient() {
             initData: initData.raw
           })
         });
-      
+
         const { token } = await authResponse.json();
-      
+
         localStorage.setItem('jwt', token);
-      
+
         const result = await fetchHome(id, token);
-      
+
         setData({
           ...result,
           formattedDate: formatDate(result.end_date),
           daysLeft: getTimeLeft(result.end_date),
         });
-      
+
       } catch (e) {
         console.error(e);
       } finally {
         setIsLoading(false);
       }
     }
-  
+
     initApp();
   }, []);
 
   const handleDelete = async (hwid: string) => {
-    if (!userId) return;
+    //if (!userId) return;
 
-    if (!token) return;
-    await deleteDevice(userId, hwid, token);
+    //if (!token) return;
+    //await deleteDevice(userId, hwid, token);
     setData((prev: any) => ({
       ...prev,
       user_devices: {
