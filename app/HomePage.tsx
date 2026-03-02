@@ -18,41 +18,42 @@ export default function HomePageClient() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-
+    
     const tg = window.Telegram?.WebApp;
     if (!tg) return;
-
+    
     tg.ready();
-
+    
     const initDataRaw = tg.initData;
-
     if (!initDataRaw) {
       console.error("No initData");
       return;
     }
-
+  
     async function initApp() {
       try {
         const authResponse = await fetch('/api/auth/telegram', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            initData: initDataRaw
-          })
+          body: JSON.stringify({ initData: initDataRaw })
         });
-
-        const { token } = await authResponse.json();
-
-        localStorage.setItem('jwt', token);
-
-        // дальше твоя логика
+      
+        if (!authResponse.ok) {
+          throw new Error("Auth failed");
+        }
+      
+        const data = await authResponse.json();
+      
+        localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('refresh_token', data.refresh_token);
+      
       } catch (e) {
         console.error(e);
       } finally {
         setIsLoading(false);
       }
     }
-
+  
     initApp();
   }, []);
 
