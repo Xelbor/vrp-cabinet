@@ -42,39 +42,44 @@ export default function HomePageClient() {
   console.log(token);
 
   useEffect(() => {
-    init();
-
-    const tgUser = initData.user();
-    const id = tgUser?.id.toString();
-
-    if (id) {
+    async function initApp() {
+      init();
+    
+      const tgUser = initData.user();
+      const id = tgUser?.id?.toString();
+      if (!id) return;
+    
       setUserId(id);
-    }
-
-    async function load(currentUserId: string) {
+    
       try {
-        setIsLoading(true);
-        
-        await authenticate();
-        
-        if (!token) return;
-        const result = await fetchHome(currentUserId, token);
-
+        const authResponse = await fetch('/api/auth/telegram', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            initData: initData.raw
+          })
+        });
+      
+        const { token } = await authResponse.json();
+      
+        localStorage.setItem('jwt', token);
+      
+        const result = await fetchHome(id, token);
+      
         setData({
           ...result,
           formattedDate: formatDate(result.end_date),
           daysLeft: getTimeLeft(result.end_date),
         });
-      } catch (error) {
-        console.error("Ошибка загрузки:", error);
+      
+      } catch (e) {
+        console.error(e);
       } finally {
         setIsLoading(false);
       }
     }
-
-    if (id) {
-      load(id);
-    }
+  
+    initApp();
   }, []);
 
   const handleDelete = async (hwid: string) => {
