@@ -2,10 +2,10 @@ export async function fetchHome(token: string) {
   const response = await fetch(`/api/home`, {
     method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({  }),
+    body: JSON.stringify({}),
   })
   
   if (!response.ok) {
