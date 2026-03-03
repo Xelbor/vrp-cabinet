@@ -16,59 +16,25 @@ export default function HomePageClient() {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
-    const tg = window.Telegram?.WebApp;
-    if (!tg) return;
-    
-    tg.ready();
-    
-    const initDataRaw = tg.initData;
-    if (!initDataRaw) {
-      console.error("No initData");
-      return;
-    }
-    
-    load();
-  
-    async function initApp() {
-      try {
-        const authResponse = await fetch('/api/auth/telegram', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ initData: initDataRaw })
-        });
-      
-        if (!authResponse.ok) {
-          throw new Error("Auth failed");
-        }
-      
-        const data = await authResponse.json();
-      
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('refresh_token', data.refresh_token);
-      
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    async function load() {
+    async function bootstrap() {
       try {
         setIsLoading(true);
       
-        await initApp();
-
+        const tg = window.Telegram?.WebApp;
+        const initDataRaw = tg?.initData;
+      
+        if (initDataRaw) {
+          await fetch('/api/auth/telegram', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ initData: initDataRaw })
+          });
+        }
+      
         const response = await fetchAPI('/api/home', {
           method: 'POST',
           body: JSON.stringify({})
         });
-      
-        if (!response.ok) {
-          throw new Error("Failed to load home");
-        }
       
         const result = await response.json();
       
@@ -78,12 +44,14 @@ export default function HomePageClient() {
           daysLeft: getTimeLeft(result.end_date),
         });
       
-      } catch (error) {
-        console.error("Ошибка загрузки:", error);
+      } catch (e) {
+        console.error(e);
       } finally {
         setIsLoading(false);
       }
     }
+  
+    bootstrap();
   }, []);
 
   const handleDelete = async (hwid: string) => {
