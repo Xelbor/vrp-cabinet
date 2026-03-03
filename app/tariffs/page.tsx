@@ -17,7 +17,7 @@ export default function TariffsPage() {
 
   const token = getToken();
 
-  const handleBuyKey = (id: string, plan: string) => {
+  const handleBuyKey = (plan: string) => {
     setErrorMsg(null);
     setLoading(true);
 
@@ -78,7 +78,7 @@ export default function TariffsPage() {
                         <p className="text-2xl">БЕСПЛАТНО</p>
                       </div>
                   
-                      <Button onClick={() => handleBuyKey(userId, "trial")} className="w-full cursor-pointer">
+                      <Button onClick={() => handleBuyKey("trial")} className="w-full cursor-pointer">
                         Оформить
                       </Button>
                     </div>
@@ -102,7 +102,7 @@ export default function TariffsPage() {
                         <p className="text-2xl">85<span className='font-mono font-bold'>₽</span> / месяц</p>
                       </div>
                   
-                      <Button onClick={() => handleBuyKey(userId, "paid_1")} className="w-full cursor-pointer">
+                      <Button onClick={() => handleBuyKey("paid_1")} className="w-full cursor-pointer">
                         Купить
                       </Button>
                     </div>
@@ -126,7 +126,7 @@ export default function TariffsPage() {
                         <p className="text-2xl">150<span className='font-mono font-bold'>₽</span> / месяц</p>
                       </div>
                   
-                      <Button onClick={() => handleBuyKey(userId, "paid_2")} className="w-full cursor-pointer">
+                      <Button onClick={() => handleBuyKey("paid_2")} className="w-full cursor-pointer">
                         Купить
                       </Button>
                     </div>
@@ -150,7 +150,7 @@ export default function TariffsPage() {
                         <p className="text-2xl">270<span className='font-mono font-bold'>₽</span> / месяц</p>
                       </div>
                   
-                      <Button onClick={() => handleBuyKey(userId, "paid_3")} className="w-full cursor-pointer">
+                      <Button onClick={() => handleBuyKey("paid_3")} className="w-full cursor-pointer">
                         Купить
                       </Button>
                     </div>

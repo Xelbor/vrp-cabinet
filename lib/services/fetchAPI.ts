@@ -26,7 +26,7 @@ async function refreshToken() {
   return true;
 }
 
-async function fetchAPI(
+export async function fetchAPI(
   url: string,
   options: RequestInit & { json?: any } = {}
 ) {
