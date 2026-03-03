@@ -24,12 +24,9 @@ export default function BalancePage() {
       try {
         setIsLoading(true);
 
-        const result = await fetchAPI('/api/chargeBalance', {
+        const result = await fetchAPI('/api/balance', {
           method: 'POST',
-          body: JSON.stringify({ 
-              amount: Number(amount),
-              method: selected
-          })
+          body: JSON.stringify({})
         });
 
         setData({
@@ -70,7 +67,10 @@ export default function BalancePage() {
     try {
       const result = await fetchAPI('/api/chargeBalance', {
         method: 'POST',
-        body: JSON.stringify({ amount, selected })
+        body: JSON.stringify({ 
+            amount: Number(amount), // Убедитесь, что это число
+            method: selected        // Изменили 'selected' на 'method'
+        })
       });
       
       if (result && result.payment_link) {
