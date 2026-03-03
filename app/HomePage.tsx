@@ -11,14 +11,11 @@ import { fetchAPI } from "@/lib/services/fetchAPI";
 import { formatDate, getTimeLeft } from '@/lib/date';
 import { useEffect, useState } from 'react';
 
-import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-
 export default function HomePageClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
+
+  const [error_msg, setError] = useState("");
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -31,6 +28,7 @@ export default function HomePageClient() {
     const initDataRaw = tg.initData;
     if (!initDataRaw) {
       console.error("No initData");
+      setError("No initData");
       return;
     }
     
@@ -54,6 +52,7 @@ export default function HomePageClient() {
         localStorage.setItem('refresh_token', data.refresh_token);
       
       } catch (e) {
+        setError("e");
         console.error(e);
       }
     }
@@ -82,6 +81,7 @@ export default function HomePageClient() {
         });
       
       } catch (error) {
+        setError("error of loading");
         console.error("Ошибка загрузки:", error);
       } finally {
         setIsLoading(false);
@@ -103,42 +103,16 @@ export default function HomePageClient() {
 
   return (
     <motion.div id='root' className='root' initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-      <h2 className='font-bold text-5xl p-5 mt-5'>Главная</h2>
+      <h2 className='font-bold text-5xl p-5 mt-5'>Главная {error_msg}</h2>
       <div className="min-h-screen text-zinc-100 p-6 z-1 flex justify-center">
         <div className="w-full md:max-w-[1200px]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="grid grid-cols-2 gap-4">
               <motion.div whileHover={{ scale: 1.02 }}>
-                 <Card className="bg-zinc-900 border-zinc-800 shadow-xl rounded-2xl z-1">
-                    <CardHeader className="px-4">
-                      <CardTitle className="flex items-center justify-between text-white text-lg">
-                          Мой баланс
-                      </CardTitle>
-                      <div className="text-zinc-400"> 
-                        <div className='flex justify-between items-start'>
-                          <div className='flex flex-col px-1'>
-                            <span className="text-white text-4xl">
-                              {isLoading ? (
-                                <Skeleton className="h-10 w-24 rounded-md" />
-                              ) : (
-                                <>
-                                  {data?.balance}
-                                  <span className='font-mono font-bold text-3xl'>₽</span>
-                                </>
-                              )}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <div className='px-2 '>
-                      <Link href="balance">
-                          <Button variant="secondary" className="w-full h-8 md:h-10 text-xs md:text-sm bg-zinc-800 hover:bg-zinc-700 cursor-pointer">
-                            Пополнить баланс
-                          </Button>
-                        </Link>
-                    </div>
-                </Card>
+                 <BalanceCard
+                    balance={data?.balance}
+                    isLoading={isLoading}
+                  />
               </motion.div>
     
               <motion.div whileHover={{ scale: 1.02 }}>
