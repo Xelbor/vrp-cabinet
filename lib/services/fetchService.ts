@@ -1,19 +1,14 @@
-async function refreshToken() {
+async function refreshToken(): Promise<boolean> {
   const refreshToken = localStorage.getItem("refresh_token");
+  if (!refreshToken) return false;
 
   const response = await fetch("/api/auth/refresh", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      refresh_token: refreshToken,
-    }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refresh_token: refreshToken }),
   });
 
-  if (!response.ok) {
-    return false;
-  }
+  if (!response.ok) return false;
 
   const data = await response.json();
   localStorage.setItem("access_token", data.access_token);
@@ -21,35 +16,34 @@ async function refreshToken() {
   return true;
 }
 
-async function apiFetch(url: string, body: RequestInit = {}) {
+interface ApiFetchOptions extends RequestInit {
+  retry?: boolean; // для внутреннего рекурсивного вызова
+}
+
+async function apiFetch(url: string, options: ApiFetchOptions = {}): Promise<any> {
   let accessToken = localStorage.getItem("access_token");
 
-  const response = await fetch(url, {
-    ...body,
+  const fetchOptions: RequestInit = {
+    method: options.method || "POST",
     headers: {
-      ...(body.headers || {}),
-      Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
+      ...(options.headers || {}),
+      Authorization: `Bearer ${accessToken}`,
     },
-  });
+    body: options.body ? JSON.stringify(options.body) : undefined,
+  };
 
-  if (response.status === 401) {
+  const response = await fetch(url, fetchOptions);
+
+  if (response.status === 401 && !options.retry) {
     const refreshed = await refreshToken();
-    if (!refreshed) {
-      throw new Error("Session expired");
-    }
+    if (!refreshed) throw new Error("Session expired");
 
-    accessToken = localStorage.getItem("access_token");
-
-    return fetch(url, {
-      ...body,
-      headers: {
-        ...(body.headers || {}),
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-    });
+    // повторяем запрос с новым токеном
+    return apiFetch(url, { ...options, retry: true });
   }
 
-  return response;
+  if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+
+  return response.json();
 }
