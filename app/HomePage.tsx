@@ -59,10 +59,7 @@ export default function HomePageClient() {
       try {
         setIsLoading(true);
       
-        const hasToken = localStorage.getItem("access_token");
-        if (!hasToken) {
-          await initApp();
-        }
+        await initApp();
 
         const response = await fetchAPI("home/", data.access_token);
       

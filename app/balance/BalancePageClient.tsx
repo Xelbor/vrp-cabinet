@@ -34,7 +34,7 @@ export default function BalancePage() {
         setIsLoading(true);
         
         if (!token) return;
-        const result = await fetchAPI("balance/", data.access_token);
+        const result = await fetchBalance(token);
 
         setData({
           ...result
