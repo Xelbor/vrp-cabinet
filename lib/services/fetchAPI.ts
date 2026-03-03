@@ -1,8 +1,3 @@
-export function getToken() {
-  if (typeof window === "undefined") return null;
-  return localStorage.getItem("access_token");
-}
-
 async function refreshToken() {
   const refreshToken = localStorage.getItem("refresh_token");
 

@@ -24,9 +24,12 @@ export default function BalancePage() {
       try {
         setIsLoading(true);
 
-        const result = await fetchAPI('/api/balance', {
+        const result = await fetchAPI('/api/chargeBalance', {
           method: 'POST',
-          body: JSON.stringify({})
+          body: JSON.stringify({ 
+              amount: Number(amount),
+              method: selected
+          })
         });
 
         setData({
