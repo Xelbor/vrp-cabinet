@@ -15,7 +15,7 @@ export default function HomePageClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
 
-  const [error_msg, setError] = useState("");
+  const [error_msg, setError] = useState<any>("");
 
   function getErrorMessage(error: unknown): string {
     if (error instanceof Error) {
@@ -37,6 +37,7 @@ export default function HomePageClient() {
     if (typeof window === 'undefined') return;
     
     const tg = window.Telegram?.WebApp;
+    setError(tg?.platform);
     if (!tg) return;
     
     tg.ready();
@@ -142,7 +143,7 @@ export default function HomePageClient() {
                 </pre>
               )}*/}
               <pre className="text-red-500 text-xs whitespace-pre-wrap bg-zinc-900 p-3 rounded-xl mb-4">
-                {window.Telegram?.WebApp?.platform}
+                {error_msg}
               </pre>
               <motion.div whileHover={{ scale: 1.02 }}>
                  <BalanceCard
