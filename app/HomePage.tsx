@@ -40,12 +40,6 @@ export default function HomePageClient() {
     if (!tg) return;
     
     tg.ready();
-
-    const mobilePlatforms = ["ios", "android"];
-
-    if (mobilePlatforms.includes(tg.platform)) {
-      tg.expand();
-    }
     
     const initDataRaw = tg.initData;
     if (!initDataRaw) {
