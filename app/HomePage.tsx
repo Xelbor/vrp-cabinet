@@ -9,6 +9,7 @@ import { DaysLeftCard } from '@/components/home/DaysLeftCard';
 import { motion } from "framer-motion";
 import { fetchHome, deleteDevice } from '@/lib/services/home_service';
 import { formatDate, getTimeLeft } from '@/lib/date';
+import { getToken } from "@/lib/services/fetchAPI";
 import { useEffect, useState } from 'react';
 
 export default function HomePageClient() {

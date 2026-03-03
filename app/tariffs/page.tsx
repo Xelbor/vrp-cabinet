@@ -7,11 +7,11 @@ import { SquarePlus } from 'lucide-react';
 import { useState } from 'react';
 import { Separator } from "@/components/ui/separator";
 import { buyKey } from "@/lib/services/tariffs_service";
+import { getToken } from "@/lib/services/fetchAPI";
 import { toast } from "sonner";
 
 
 export default function TariffsPage() {
-  const [userId, setUserId] = useState("1632782190");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 

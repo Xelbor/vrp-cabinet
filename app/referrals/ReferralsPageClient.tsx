@@ -7,6 +7,7 @@ import { CopyButton, HandleCopyText } from "@/components/ui/copy-button";
 import { CollapsibleNew } from "@/components/ui/collapsible-new";
 import { HandCoins, BookMarked, Link} from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
+import { getToken } from "@/lib/services/fetchAPI";
 import { useRef, useEffect, useState } from 'react';
 
 export default function ReferralsPageClient() {
