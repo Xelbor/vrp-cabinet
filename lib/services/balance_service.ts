@@ -1,11 +1,11 @@
-export async function fetchBalance(userId: string, token: string) {
+export async function fetchBalance(token: string) {
   const response = await fetch(`/api/balance`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({ user_id: userId }),
+    body: JSON.stringify({}),
   })
   
   if (!response.ok) {
