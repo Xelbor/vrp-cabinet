@@ -61,7 +61,9 @@ export default function HomePageClient() {
       
         await initApp();
 
-        const response = await fetchAPI("home", data.access_token);
+        const token = getToken();
+        if (!token) return;
+        const response = await fetchHome(token);
       
         if (!response.ok) {
           throw new Error("Failed to load home");

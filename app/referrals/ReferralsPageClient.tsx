@@ -14,11 +14,6 @@ export default function ReferralsPageClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
 
-  function getToken() {
-    if (typeof window === "undefined") return null;
-    return localStorage.getItem("access_token");
-  }
-
   const token = getToken();
 
   useEffect(() => {

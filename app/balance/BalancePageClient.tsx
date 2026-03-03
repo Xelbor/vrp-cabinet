@@ -18,11 +18,6 @@ export default function BalancePage() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
-    
-  function getToken() {
-    if (typeof window === "undefined") return null;
-    return localStorage.getItem("access_token");
-  }
 
   const token = getToken();
 
@@ -32,10 +27,7 @@ export default function BalancePage() {
         setIsLoading(true);
         
         if (!token) return;
-        const result = await fetchAPI('/api/balance', {
-          method: 'POST',
-          body: JSON.stringify({})
-        });
+        const result = await fetchBalance(token);
 
         setData({
           ...result
