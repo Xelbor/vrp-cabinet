@@ -10,13 +10,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import React from 'react'
+import { useEffect, useState } from "react"
 
-interface HeaderProps {
-  photoUrl: string | null
-}
+export function Header() {
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null)
 
-export function Header({ photoUrl }: HeaderProps) {
+  useEffect(() => {
+    const photo =
+      window.Telegram?.WebApp?.initDataUnsafe?.user?.photo_url || null
+
+    setPhotoUrl(photo)
+  }, [])
+
   return(
     <div className='header w-full h-20 flex items-center justify-between px-4 bg-[rgb(22,22,22)] rounded-b-[25px]'>
       <div className='header-left flex items-center'>
