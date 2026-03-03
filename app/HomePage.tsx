@@ -17,6 +17,22 @@ export default function HomePageClient() {
 
   const [error_msg, setError] = useState("");
 
+  function getErrorMessage(error: unknown): string {
+    if (error instanceof Error) {
+      return `${error.name}: ${error.message}\n${error.stack}`;
+    }
+
+    if (typeof error === "string") {
+      return error;
+    }
+
+    try {
+      return JSON.stringify(error, null, 2);
+    } catch {
+      return "Unknown error";
+    }
+  }
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
@@ -43,7 +59,10 @@ export default function HomePageClient() {
         });
       
         if (!authResponse.ok) {
-          throw new Error("Auth failed");
+          const text = await authResponse.text();
+          throw new Error(
+            `Auth failed: ${authResponse.status} ${authResponse.statusText}\n${text}`
+          );
         }
       
         const data = await authResponse.json();
@@ -51,9 +70,11 @@ export default function HomePageClient() {
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('refresh_token', data.refresh_token);
       
-      } catch (e) {
-        setError("e");
-        console.error(e);
+      } catch (error) {
+        const msg = getErrorMessage(error);
+        setError(msg);
+        console.error("AUTH ERROR:", error);
+        throw error; // важно пробросить дальше
       }
     }
 
@@ -69,10 +90,15 @@ export default function HomePageClient() {
         });
       
         if (!response.ok) {
-          throw new Error("Failed to load home");
+          const text = await response.text();
+          throw new Error(
+            `Home load failed: ${response.status} ${response.statusText}\n${text}`
+          );
         }
       
         const result = await response.json();
+
+        console.log("HOME RESULT:", result);
       
         setData({
           ...result,
@@ -81,8 +107,9 @@ export default function HomePageClient() {
         });
       
       } catch (error) {
-        setError("error of loading");
-        console.error("Ошибка загрузки:", error);
+        const msg = getErrorMessage(error);
+        setError(msg);
+        console.error("HOME LOAD ERROR:", error);
       } finally {
         setIsLoading(false);
       }
@@ -103,11 +130,16 @@ export default function HomePageClient() {
 
   return (
     <motion.div id='root' className='root' initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-      <h2 className='font-bold text-5xl p-5 mt-5'>Главная {error_msg}</h2>
+      <h2 className='font-bold text-5xl p-5 mt-5'>Главная</h2>
       <div className="min-h-screen text-zinc-100 p-6 z-1 flex justify-center">
         <div className="w-full md:max-w-[1200px]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="grid grid-cols-2 gap-4">
+              {error_msg && (
+                <pre className="text-red-500 text-xs whitespace-pre-wrap bg-zinc-900 p-3 rounded-xl mb-4">
+                  {error_msg}
+                </pre>
+              )}
               <motion.div whileHover={{ scale: 1.02 }}>
                  <BalanceCard
                     balance={data?.balance}
