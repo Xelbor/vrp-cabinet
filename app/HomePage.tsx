@@ -16,76 +16,63 @@ export default function HomePageClient() {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
-    const tg = window.Telegram?.WebApp;
-    if (!tg) return;
-    
-    tg.ready();
-    
-    const initDataRaw = tg.initData;
-    if (!initDataRaw) {
-      console.error("No initData");
-      return;
-    }
-    
-    load();
-  
-    async function initApp() {
-      try {
-        const authResponse = await fetch('/api/auth/telegram', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ initData: initDataRaw })
-        });
-      
-        if (!authResponse.ok) {
-          throw new Error("Auth failed");
-        }
-      
-        const data = await authResponse.json();
-      
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('refresh_token', data.refresh_token);
-      
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setIsLoading(false);
+    const init = async () => {
+      // 1. Проверка окружения Telegram
+      const tg = window.Telegram?.WebApp;
+      if (!tg) {
+        console.error("That's not a Telegram Mini App");
+        setIsLoading(false); // Чтобы не висел вечный лоадер
+        return;
       }
-    }
 
-    async function load() {
+      tg.ready();
+      const initDataRaw = tg.initData;
+
       try {
         setIsLoading(true);
-      
-        const hasToken = localStorage.getItem("access_token");
-        if (!hasToken) {
-          await initApp();
+
+        // 2. Проверяем токен, если нет - авторизуемся
+        let token = localStorage.getItem("access_token");
+
+        if (!token && initDataRaw) {
+          const authResponse = await fetch('/api/auth/telegram', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ initData: initDataRaw })
+          });
+
+          if (authResponse.ok) {
+            const authData = await authResponse.json();
+            localStorage.setItem('access_token', authData.access_token);
+            localStorage.setItem('refresh_token', authData.refresh_token);
+            token = authData.access_token;
+          } else {
+            throw new Error("Auth failed");
+          }
         }
 
-        const response = await apiFetch("/api/home", {
-          method: "POST",
-        });
-      
-        if (!response.ok) {
-          throw new Error("Failed to load home");
-        }
-      
+        // 3. Загружаем данные страницы
+        // Важно: apiFetch уже использует токен из localStorage
+        const response = await apiFetch("/api/home", { method: "POST" });
+
+        if (!response.ok) throw new Error("Failed to load home");
+
         const result = await response.json();
-      
+
         setData({
           ...result,
           formattedDate: formatDate(result.end_date),
           daysLeft: getTimeLeft(result.end_date),
         });
-      
+
       } catch (error) {
-        console.error("Ошибка загрузки:", error);
+        console.error("Ошибка инициализации:", error);
       } finally {
         setIsLoading(false);
       }
-    }
+    };
+
+    init();
   }, []);
 
   const handleDelete = async (hwid: string) => {
