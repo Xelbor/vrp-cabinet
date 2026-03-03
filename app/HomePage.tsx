@@ -37,7 +37,6 @@ export default function HomePageClient() {
     if (typeof window === 'undefined') return;
 
     const tg = window.Telegram?.WebApp;
-    setError(tg?.platform);
     if (!tg) return;
     
     tg.ready();
@@ -146,9 +145,6 @@ export default function HomePageClient() {
                   {error_msg}
                 </pre>
               )}*/}
-              <pre className="text-red-500 text-xs whitespace-pre-wrap bg-zinc-900 p-3 rounded-xl mb-4">
-                {error_msg}
-              </pre>
               <motion.div whileHover={{ scale: 1.02 }}>
                  <BalanceCard
                     balance={data?.balance}
