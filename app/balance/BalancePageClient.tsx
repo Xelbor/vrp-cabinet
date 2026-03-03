@@ -68,8 +68,8 @@ export default function BalancePage() {
       const result = await fetchAPI('/api/chargeBalance', {
         method: 'POST',
         body: JSON.stringify({ 
-            amount: Number(amount), // Убедитесь, что это число
-            method: selected        // Изменили 'selected' на 'method'
+            amount: Number(amount),
+            method: selected
         })
       });
       
