@@ -1,7 +1,6 @@
 'use client'
 
 import { ThemeProvider } from "@/components/theme-provider"
-import { ModeToggle } from "@/components/mode-toggle"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Select,
@@ -13,12 +12,16 @@ import {
 } from "@/components/ui/select"
 import React from 'react'
 
-export class Header extends React.Component {
-  render() {
-    return <div className='header w-full h-20 flex items-center justify-between px-4 bg-[rgb(22,22,22)] rounded-b-[25px]'>
+interface HeaderProps {
+  photoUrl: string | null
+}
+
+export function Header({ photoUrl }: HeaderProps) {
+  return(
+    <div className='header w-full h-20 flex items-center justify-between px-4 bg-[rgb(22,22,22)] rounded-b-[25px]'>
       <div className='header-left flex items-center'>
         <Avatar className="ml-2" size="lg">
-          <AvatarImage src="https://github.com/evilrabbit.png"/>
+          <AvatarImage src={photoUrl ?? undefined}/>
           <AvatarFallback>AN</AvatarFallback>
         </Avatar>
       </div>
@@ -43,5 +46,5 @@ export class Header extends React.Component {
         </Select>
       </div>
     </div>
-  }
+  )
 }

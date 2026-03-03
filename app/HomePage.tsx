@@ -87,9 +87,6 @@ export default function HomePageClient() {
   }, []);
 
   const handleDelete = async (hwid: string) => {
-    //if (!userId) return;
-
-    //if (!token) return;
     //await deleteDevice(userId, hwid, token);
     setData((prev: any) => ({
       ...prev,
