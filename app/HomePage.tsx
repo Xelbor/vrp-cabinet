@@ -78,7 +78,7 @@ export default function HomePageClient() {
         const msg = getErrorMessage(error);
         setError(msg);
         console.error("AUTH ERROR:", error);
-        throw error; // важно пробросить дальше
+        throw error;
       }
     }
 

@@ -9,12 +9,22 @@ import { Wallet, CreditCard  } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { fetchAPI } from "@/lib/services/fetchAPI";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function BalancePage() {
   const [amount, setAmount] = useState<number | "">("");
   const [selected, setSelected] = useState<"bank_card" | "sbp" | null>(null);
   const [error_amount_msg, setAmountError] = useState("");
   const [error_method_msg, setMethodError] = useState("");
+  const content = false;
 
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
@@ -153,7 +163,7 @@ export default function BalancePage() {
                           <CreditCard size={24} className="text-white" />
                           <div className="flex flex-col">
                             <div className="text-white">Банковская карта</div>
-                            <div className="text-xs text-zinc-400">Visa / MasterCard</div>
+                            <div className="text-xs text-zinc-400">Visa / MasterCard / Мир</div>
                           </div>
                         </div>
                       </div>
@@ -177,9 +187,64 @@ export default function BalancePage() {
               </form>
             </Card>
           </motion.div>
+        </div>
 
-          <motion.div whileHover={{ scale: 1.01 }} className="h-full">
-            <CollapsibleNew title="История пополнений">Здесь будет отображаться история ваших пополнений.</CollapsibleNew>
+        <div className="mt-8">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+            <Card className="bg-zinc-900 border-zinc-800 shadow-xl rounded-2xl overflow-hidden">
+              <CardHeader>
+                <CardTitle className="text-xl text-white">История транзакций</CardTitle>
+                <CardDescription>Список ваших последних пополнений и списаний</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader className="bg-zinc-800/50">
+                    <TableRow className="border-zinc-800 hover:bg-transparent">
+                      <TableHead className="text-zinc-400">ID Платежа</TableHead>
+                      <TableHead className="text-zinc-400">Статус</TableHead>
+                      <TableHead className="text-zinc-400">Метод</TableHead>
+                      <TableHead className="text-right text-zinc-400">Сумма</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {isLoading ? (
+                      // Скелетоны для таблицы
+                      [...Array(3)].map((_, i) => (
+                        <TableRow key={i} className="border-zinc-800">
+                          <TableCell><Skeleton className="h-4 w-20 bg-zinc-800" /></TableCell>
+                          <TableCell><Skeleton className="h-4 w-16 bg-zinc-800" /></TableCell>
+                          <TableCell><Skeleton className="h-4 w-24 bg-zinc-800" /></TableCell>
+                          <TableCell className="text-right"><Skeleton className="h-4 w-12 ml-auto bg-zinc-800" /></TableCell>
+                        </TableRow>
+                      ))
+                    ) : data?.history?.length > 0 ? (
+                      data.history.map((item: any) => (
+                        <TableRow key={item.id} className="border-zinc-800 hover:bg-zinc-800/30 transition-colors">
+                          <TableCell className="font-medium text-zinc-300">#{item.id}</TableCell>
+                          <TableCell>
+                            <span className={`px-2 py-1 rounded-full text-[10px] uppercase font-bold ${
+                              item.status === 'success' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-orange-500/10 text-orange-400'
+                            }`}>
+                              {item.status}
+                            </span>
+                          </TableCell>
+                          <TableCell className="text-zinc-400">{item.method}</TableCell>
+                          <TableCell className="text-right font-semibold text-white">
+                            {item.amount} ₽
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={4} className="text-center py-10 text-zinc-500">
+                           История операций пуста
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </motion.div>
         </div>
       </div>
