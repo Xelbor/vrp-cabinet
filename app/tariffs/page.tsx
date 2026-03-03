@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 import { SquarePlus } from 'lucide-react';
 import { useState } from 'react';
 import { Separator } from "@/components/ui/separator";
-import { buyKey } from "@/lib/services/tariffs_service";
-import { getToken } from "@/lib/services/fetchAPI";
+import { fetchAPI } from "@/lib/services/fetchAPI";
 import { toast } from "sonner";
 
 
@@ -15,21 +14,20 @@ export default function TariffsPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const token = getToken();
-
   const handleBuyKey = (plan: string) => {
     setErrorMsg(null);
     setLoading(true);
-
-    if (!token) return;
-
+    
     toast.promise(
-      buyKey(plan, token)
+      fetchAPI(`/api/buykey`, {
+        method: 'POST',
+        json: { tariff: plan }
+      })
         .then((result) => {
           return result;
         })
         .catch((err: any) => {
-          if (err.message === "TRIAL_ALREADY_USED") {
+          if (err.message.includes("TRIAL_ALREADY_USED")) {
             throw new Error("Вы уже использовали бесплатный период");
           }
           throw new Error("Произошла ошибка при оформлении");

@@ -110,7 +110,15 @@ export default function HomePageClient() {
   }, []);
 
   const handleDelete = async (hwid: string) => {
-    //await deleteDevice(userId, hwid, token);
+    const result = await fetchAPI('/api/delete_hwid_user', {
+      method: 'POST',
+      body: JSON.stringify({ hwid })
+    });
+
+    if (!result) {
+      throw new Error("Empty response from /api/home");
+    }
+
     setData((prev: any) => ({
       ...prev,
       user_devices: {
@@ -128,11 +136,11 @@ export default function HomePageClient() {
         <div className="w-full md:max-w-[1200px]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="grid grid-cols-2 gap-4">
-              {error_msg && (
+              {/*{error_msg && (
                 <pre className="text-red-500 text-xs whitespace-pre-wrap bg-zinc-900 p-3 rounded-xl mb-4">
                   {error_msg}
                 </pre>
-              )}
+              )}*/}
               <motion.div whileHover={{ scale: 1.02 }}>
                  <BalanceCard
                     balance={data?.balance}
