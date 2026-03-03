@@ -7,9 +7,8 @@ import { SubscriptionKeyCard } from '@/components/home/SubscriptionKeyCard';
 import { DevicesCard } from '@/components/home/DevicesCard';
 import { DaysLeftCard } from '@/components/home/DaysLeftCard';
 import { motion } from "framer-motion";
-import { fetchHome, deleteDevice } from '@/lib/services/home_service';
+import { fetchAPI } from "@/lib/services/fetchAPI";
 import { formatDate, getTimeLeft } from '@/lib/date';
-import { getToken } from "@/lib/services/fetchAPI";
 import { useEffect, useState } from 'react';
 
 export default function HomePageClient() {
@@ -62,9 +61,10 @@ export default function HomePageClient() {
       
         await initApp();
 
-        const token = getToken();
-        if (!token) return;
-        const response = await fetchHome(token);
+        const response = await fetchAPI('/api/home', {
+          method: 'POST',
+          body: JSON.stringify({})
+        });
       
         if (!response.ok) {
           throw new Error("Failed to load home");

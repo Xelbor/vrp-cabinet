@@ -7,8 +7,7 @@ import { Input } from "@/components/ui/input";
 import { CollapsibleNew } from "@/components/ui/collapsible-new";
 import { Wallet, CreditCard  } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { fetchBalance, сhargeBalance } from "@/lib/services/balance_service";
-import { fetchAPI, getToken } from "@/lib/services/fetchAPI";
+import { fetchAPI } from "@/lib/services/fetchAPI";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function BalancePage() {
@@ -20,14 +19,11 @@ export default function BalancePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
 
-  const token = getToken();
-
   useEffect(() => {
     async function load() {
       try {
         setIsLoading(true);
-        
-        if (!token) return;
+
         const result = await fetchAPI('/api/balance', {
           method: 'POST',
           body: JSON.stringify({})
@@ -53,11 +49,6 @@ export default function BalancePage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!token) {
-      console.error("No have token");
-      return;
-    }
-
     if (!amount || Number(amount) <= 0) {
       setAmountError("Введите корректную сумму");
       return;
@@ -74,7 +65,10 @@ export default function BalancePage() {
     }
 
     try {
-      const result = await сhargeBalance(amount, selected, token);
+      const result = await fetchAPI('/api/chargeBalance', {
+        method: 'POST',
+        body: JSON.stringify({ amount, selected })
+      });
       
       if (result && result.payment_link) {
         window.location.href = result.payment_link;

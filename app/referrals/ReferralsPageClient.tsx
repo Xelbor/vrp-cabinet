@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { fetchReferrals } from "@/lib/services/referrals_service";
+import { fetchAPI } from "@/lib/services/fetchAPI";
 import { CopyButton, HandleCopyText } from "@/components/ui/copy-button";
 import { CollapsibleNew } from "@/components/ui/collapsible-new";
 import { HandCoins, BookMarked, Link} from 'lucide-react';
@@ -23,7 +23,10 @@ export default function ReferralsPageClient() {
         setIsLoading(true);
 
         if (!token) return;
-        const result = await fetchReferrals(token);
+        const result = await fetchAPI('/api/refferals', {
+          method: 'POST',
+          body: JSON.stringify({})
+        });
   
         setData({
           ...result
