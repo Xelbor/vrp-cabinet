@@ -27,7 +27,6 @@ export default function BalancePage() {
   const token = getToken();
 
   useEffect(() => {
-
     async function load() {
       try {
         setIsLoading(true);

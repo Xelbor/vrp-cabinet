@@ -10,7 +10,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useRef, useEffect, useState } from 'react';
 
 export default function ReferralsPageClient() {
-  const [userId, setUserId] = useState("1632782190");
   const textToCopy = useRef<HTMLDivElement>(null)
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
