@@ -8,7 +8,7 @@ import { CollapsibleNew } from "@/components/ui/collapsible-new";
 import { Wallet, CreditCard  } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { fetchBalance, сhargeBalance } from "@/lib/services/balance_service";
-import { getToken } from "@/lib/services/fetchAPI";
+import { fetchAPI, getToken } from "@/lib/services/fetchAPI";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function BalancePage() {
@@ -28,7 +28,7 @@ export default function BalancePage() {
         setIsLoading(true);
         
         if (!token) return;
-        const result = await fetchBalance(token);
+        const result = await fetchAPI("/api/balance");
 
         setData({
           ...result
