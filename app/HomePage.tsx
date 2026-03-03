@@ -84,21 +84,14 @@ export default function HomePageClient() {
       
         await initApp();
 
-        const response = await fetchAPI('/api/home', {
+        const result = await fetchAPI('/api/home', {
           method: 'POST',
           body: JSON.stringify({})
         });
       
-        if (!response.ok) {
-          const text = await response.text();
-          throw new Error(
-            `Home load failed: ${response.status} ${response.statusText}\n${text}`
-          );
+        if (!result) {
+          throw new Error("Empty response from /api/home");
         }
-      
-        const result = await response.json();
-
-        console.log("HOME RESULT:", result);
       
         setData({
           ...result,
