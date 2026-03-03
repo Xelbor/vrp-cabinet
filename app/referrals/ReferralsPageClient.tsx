@@ -7,7 +7,6 @@ import { CopyButton, HandleCopyText } from "@/components/ui/copy-button";
 import { CollapsibleNew } from "@/components/ui/collapsible-new";
 import { HandCoins, BookMarked, Link} from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
-import { getToken } from "@/lib/services/fetchAPI";
 import { useRef, useEffect, useState } from 'react';
 
 export default function ReferralsPageClient() {
@@ -15,14 +14,11 @@ export default function ReferralsPageClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
 
-  const token = getToken();
-
   useEffect(() => {
     async function load() {
       try {
         setIsLoading(true);
 
-        if (!token) return;
         const result = await fetchAPI('/api/refferals', {
           method: 'POST',
           body: JSON.stringify({})
