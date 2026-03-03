@@ -50,8 +50,6 @@ export default function HomePageClient() {
       
       } catch (e) {
         console.error(e);
-      } finally {
-        setIsLoading(false);
       }
     }
 
