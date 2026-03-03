@@ -12,7 +12,6 @@ import { formatDate, getTimeLeft } from '@/lib/date';
 import { useEffect, useState } from 'react';
 
 export default function HomePageClient() {
-  const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
 
@@ -29,6 +28,8 @@ export default function HomePageClient() {
       console.error("No initData");
       return;
     }
+    
+    load();
   
     async function initApp() {
       try {
@@ -53,8 +54,38 @@ export default function HomePageClient() {
         setIsLoading(false);
       }
     }
-  
-    initApp();
+
+    async function load() {
+      try {
+        setIsLoading(true);
+      
+        const hasToken = localStorage.getItem("access_token");
+        if (!hasToken) {
+          await initApp();
+        }
+
+        const response = await apiFetch("/api/home", {
+          method: "POST",
+        });
+      
+        if (!response.ok) {
+          throw new Error("Failed to load home");
+        }
+      
+        const result = await response.json();
+      
+        setData({
+          ...result,
+          formattedDate: formatDate(result.end_date),
+          daysLeft: getTimeLeft(result.end_date),
+        });
+      
+      } catch (error) {
+        console.error("Ошибка загрузки:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   }, []);
 
   const handleDelete = async (hwid: string) => {
