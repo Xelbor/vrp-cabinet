@@ -11,7 +11,6 @@ import { fetchBalance, сhargeBalance } from "@/lib/services/balance_service";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function BalancePage() {
-  const [userId, setUserId] = useState("1632782190");
   const [amount, setAmount] = useState<number | "">("");
   const [selected, setSelected] = useState<"bank_card" | "sbp" | null>(null);
   const [error_amount_msg, setAmountError] = useState("");
