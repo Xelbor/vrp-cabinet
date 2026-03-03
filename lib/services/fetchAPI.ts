@@ -21,35 +21,39 @@ async function refreshToken() {
   return true;
 }
 
-async function fetchAPI(url: string, body: RequestInit = {}) {
+async function fetchAPI(
+  url: string,
+  options: RequestInit & { json?: any } = {}
+) {
   let accessToken = localStorage.getItem("access_token");
 
-  const response = await fetch(url, {
-    ...body,
-    headers: {
-      ...(body.headers || {}),
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-    },
-  });
+  const { json, ...rest } = options;
 
-  if (response.status === 401) {
-    const refreshed = await refreshToken();
-    if (!refreshed) {
-      throw new Error("Session expired");
-    }
-
-    accessToken = localStorage.getItem("access_token");
-
+  const makeRequest = async () => {
     return fetch(url, {
-      ...body,
+      ...rest,
       headers: {
-        ...(body.headers || {}),
+        ...(rest.headers || {}),
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
+      body: json ? JSON.stringify(json) : rest.body,
     });
+  };
+
+  let response = await makeRequest();
+
+  if (response.status === 401) {
+    const refreshed = await refreshToken();
+    if (!refreshed) throw new Error("Session expired");
+
+    accessToken = localStorage.getItem("access_token");
+    response = await makeRequest();
   }
 
-  return response;
+  if (!response.ok) {
+    throw new Error(`HTTP error ${response.status}`);
+  }
+
+  return response.json();
 }

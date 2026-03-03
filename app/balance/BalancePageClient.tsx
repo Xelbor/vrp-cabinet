@@ -32,7 +32,10 @@ export default function BalancePage() {
         setIsLoading(true);
         
         if (!token) return;
-        const result = await fetchBalance(token);
+        const result = await fetchAPI('/api/balance', {
+          method: 'POST',
+          body: JSON.stringify({})
+        });
 
         setData({
           ...result
