@@ -1,11 +1,11 @@
-export async function fetchHome(userId: string, token: string) {
+export async function fetchHome(token: string) {
   const response = await fetch(`/api/home`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`
     },
-    body: JSON.stringify({ user_id: userId }),
+    body: JSON.stringify({  }),
   })
   
   if (!response.ok) {

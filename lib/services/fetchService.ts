@@ -1,14 +1,19 @@
-async function refreshToken(): Promise<boolean> {
+async function refreshToken() {
   const refreshToken = localStorage.getItem("refresh_token");
-  if (!refreshToken) return false;
 
-  const response = await fetch("/api/auth/refresh", {
+  const response = await fetch(`/api/auth/refresh`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ refresh_token: refreshToken }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      refresh_token: refreshToken,
+    }),
   });
 
-  if (!response.ok) return false;
+  if (!response.ok) {
+    return false;
+  }
 
   const data = await response.json();
   localStorage.setItem("access_token", data.access_token);
@@ -16,34 +21,35 @@ async function refreshToken(): Promise<boolean> {
   return true;
 }
 
-interface ApiFetchOptions extends RequestInit {
-  retry?: boolean; // для внутреннего рекурсивного вызова
-}
-
-async function apiFetch(url: string, options: ApiFetchOptions = {}): Promise<any> {
+async function apiFetch(url: string, body: RequestInit = {}) {
   let accessToken = localStorage.getItem("access_token");
 
-  const fetchOptions: RequestInit = {
-    method: options.method || "POST",
+  const response = await fetch(url, {
+    ...body,
     headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
+      ...(body.headers || {}),
       Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
     },
-    body: options.body ? JSON.stringify(options.body) : undefined,
-  };
+  });
 
-  const response = await fetch(url, fetchOptions);
-
-  if (response.status === 401 && !options.retry) {
+  if (response.status === 401) {
     const refreshed = await refreshToken();
-    if (!refreshed) throw new Error("Session expired");
+    if (!refreshed) {
+      throw new Error("Session expired");
+    }
 
-    // повторяем запрос с новым токеном
-    return apiFetch(url, { ...options, retry: true });
+    accessToken = localStorage.getItem("access_token");
+
+    return fetch(url, {
+      ...body,
+      headers: {
+        ...(body.headers || {}),
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
   }
 
-  if (!response.ok) throw new Error(`HTTP error ${response.status}`);
-
-  return response.json();
+  return response;
 }
