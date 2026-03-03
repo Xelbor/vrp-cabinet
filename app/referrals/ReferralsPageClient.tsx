@@ -28,7 +28,7 @@ export default function ReferralsPageClient() {
         setIsLoading(true);
 
         if (!token) return;
-        const result = await fetchReferrals(userId, token);
+        const result = await fetchReferrals(token);
   
         setData({
           ...result

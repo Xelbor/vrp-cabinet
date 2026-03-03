@@ -15,14 +15,14 @@ export async function fetchBalance(token: string) {
   return response.json();
 }
 
-export async function сhargeBalance(userId: string, amount: number, method: string, token: string) {
+export async function сhargeBalance(amount: number, method: string, token: string) {
   const response = await fetch(`/api/chargeBalance`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({ user_id: userId, amount, method }),
+    body: JSON.stringify({ amount, method }),
   })
   
   if (!response.ok) {

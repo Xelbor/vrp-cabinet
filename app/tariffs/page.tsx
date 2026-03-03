@@ -29,7 +29,7 @@ export default function TariffsPage() {
     if (!token) return;
 
     toast.promise(
-      buyKey(id, plan, token)
+      buyKey(plan, token)
         .then((result) => {
           return result;
         })

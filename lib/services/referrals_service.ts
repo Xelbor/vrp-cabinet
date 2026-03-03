@@ -1,11 +1,11 @@
-export async function fetchReferrals(userId: string, token: string) {
+export async function fetchReferrals(token: string) {
   const response = await fetch(`/api/refferals`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({ user_id: userId }),
+    body: JSON.stringify({  }),
   })
   
   if (!response.ok) {

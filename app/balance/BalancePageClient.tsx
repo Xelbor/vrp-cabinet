@@ -34,7 +34,7 @@ export default function BalancePage() {
         setIsLoading(true);
         
         if (!token) return;
-        const result = await fetchBalance(token);
+        const result = await fetchAPI("balance", data.access_token);
 
         setData({
           ...result
@@ -77,7 +77,7 @@ export default function BalancePage() {
     }
 
     try {
-      const result = await сhargeBalance(userId, amount, selected, token);
+      const result = await сhargeBalance(amount, selected, token);
       
       if (result && result.payment_link) {
         window.location.href = result.payment_link;
