@@ -141,11 +141,9 @@ export default function HomePageClient() {
                   {error_msg}
                 </pre>
               )}*/}
-              {error_msg && (
-                <pre className="text-red-500 text-xs whitespace-pre-wrap bg-zinc-900 p-3 rounded-xl mb-4">
-                  {window.Telegram?.WebApp?.platform}
-                </pre>
-              )}
+              <pre className="text-red-500 text-xs whitespace-pre-wrap bg-zinc-900 p-3 rounded-xl mb-4">
+                {window.Telegram?.WebApp?.platform}
+              </pre>
               <motion.div whileHover={{ scale: 1.02 }}>
                  <BalanceCard
                     balance={data?.balance}
