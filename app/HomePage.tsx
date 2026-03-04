@@ -14,6 +14,10 @@ import { useEffect, useState } from 'react';
 export default function HomePageClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
+  const [hasTrial, setHasTrial] = useState(true);
+  const [hasPaid, setHasPaid] = useState(true);
+
+  const hasAnySubscription = !!data?.trial || !!data?.paid;
 
   const [error_msg, setError] = useState<any>("");
 
@@ -36,16 +40,7 @@ export default function HomePageClient() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const tg = window.Telegram?.WebApp;
-    if (!tg) return;
-    
-    tg.ready();
-
-    if (tg.platform === "android" || tg.platform === "ios") {
-      tg.expand();
-    }
-    
-    const initDataRaw = tg.initData;
+    const initDataRaw = 'tg.initData';
     if (!initDataRaw) {
       console.error("No initData");
       setError("No initData");
@@ -85,10 +80,8 @@ export default function HomePageClient() {
     async function load() {
       try {
         setIsLoading(true);
-      
-        await initApp();
 
-        const result = await fetchAPI('/api/home', {
+        const result = await fetchAPI('http://localhost/api/home', {
           method: 'POST',
           body: JSON.stringify({})
         });
@@ -96,11 +89,36 @@ export default function HomePageClient() {
         if (!result) {
           throw new Error("Empty response from /api/home");
         }
+
+        const subscriptions = result.subscriptions ?? [];
+
+        const trialSub = subscriptions.find((s: any) =>
+          s.type?.includes("trial")
+        );
+
+        const paidSub = subscriptions.find((s: any) =>
+          !s.type?.includes("trial")
+        );
+
+        setHasTrial(!!trialSub);
+        setHasPaid(!!paidSub);
       
         setData({
-          ...result,
-          formattedDate: formatDate(result.end_date),
-          daysLeft: getTimeLeft(result.end_date),
+          balance: result.balance,
+          trial: trialSub
+            ? {
+                ...trialSub,
+                formattedDate: formatDate(trialSub.end_date),
+                daysLeft: getTimeLeft(trialSub.end_date),
+              }
+            : null,
+          paid: paidSub
+            ? {
+                ...paidSub,
+                formattedDate: formatDate(paidSub.end_date),
+                daysLeft: getTimeLeft(paidSub.end_date),
+              }
+            : null,
         });
       
       } catch (error) {
@@ -114,24 +132,48 @@ export default function HomePageClient() {
   }, []);
 
   const handleDelete = async (hwid: string) => {
+    if (!data?.paid) return;
+
     const result = await fetchAPI('/api/delete_hwid_user', {
       method: 'POST',
       body: JSON.stringify({ hwid })
     });
 
     if (!result) {
-      throw new Error("Empty response from /api/home");
+      throw new Error("Empty response from /api/delete_hwid_user");
     }
 
-    setData((prev: any) => ({
-      ...prev,
-      user_devices: {
-        devices: prev.user_devices.devices.filter(
-          (d: any) => d.hwid_uuid !== hwid
-        ),
-      },
-    }));
+    setData((prev: any) => {
+      if (!prev?.paid) return prev;
+
+      return {
+        ...prev,
+        paid: {
+          ...prev.paid,
+          devices: {
+            ...prev.paid.devices,
+            total: prev.paid.devices.total - 1,
+            devices: prev.paid.devices.devices.filter(
+              (d: any) => d.hwid_uuid !== hwid
+            ),
+          },
+        },
+      };
+    });
   };
+
+  const subscriptionType: 'none' | 'trial' | 'paid' =
+          data?.paid ? 'paid'
+          : data?.trial ? 'trial'
+          : 'none';
+              
+  const activeSubscription =
+    data?.paid ?? data?.trial ?? null;
+
+  const activeKey =
+    data?.paid?.subscription_key ??
+    data?.trial?.subscription_key ??
+    null;
 
   return (
     <motion.div id='root' className='root' initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -160,26 +202,37 @@ export default function HomePageClient() {
               </motion.div>
             </div>
     
+            {/* ===== ПОДПИСКИ ===== */}
             <motion.div whileHover={{ scale: 1.01 }}>
               <SubscriptionCard
-                status={data?.status}
-                endDate={data?.formattedDate}
-                daysLeft={data?.daysLeft}
-                trafficUsed={data?.user_traffic}
+                label={
+                  isLoading
+                    ? ""
+                    : subscriptionType === 'paid'
+                    ? "Текущая подписка"
+                    : subscriptionType === 'trial'
+                    ? "Бесплатный период"
+                    : "Подписка отсутствует"
+                }
+                status={activeSubscription?.status ?? 'INACTIVE'}
+                endDate={activeSubscription?.formattedDate}
+                daysLeft={activeSubscription?.daysLeft}
+                trafficUsed={activeSubscription?.traffic}
                 isLoading={isLoading}
+                subscriptionType={subscriptionType}
               />
             </motion.div>
-    
+
             <motion.div whileHover={{ scale: 1.01 }}>
               <SubscriptionKeyCard 
-                subscriptionKey={data?.subscription_key}
+                subscriptionKey={activeKey}
                 isLoading={isLoading}
               />
             </motion.div>
     
             <motion.div whileHover={{ scale: 1.01 }}>
               <DevicesCard 
-                devices={data?.user_devices?.devices ?? []}
+                devices={data?.paid?.devices?.devices ?? []}
                 isLoading={isLoading}
                 onDelete={handleDelete}
               />
