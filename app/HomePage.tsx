@@ -14,10 +14,6 @@ import { useEffect, useState } from 'react';
 export default function HomePageClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
-  const [hasTrial, setHasTrial] = useState(true);
-  const [hasPaid, setHasPaid] = useState(true);
-
-  const hasAnySubscription = !!data?.trial || !!data?.paid;
 
   const [error_msg, setError] = useState<any>("");
 
@@ -92,19 +88,23 @@ export default function HomePageClient() {
 
         const subscriptions = result.subscriptions ?? [];
 
-        const trialSub = subscriptions.find((s: any) =>
-          s.type?.includes("trial")
+        const trialSub = subscriptions.find(
+          (s: any) => s.type === "trial"
+        );
+        
+        const paidSub = subscriptions.find(
+          (s: any) => s.type === "paid"
+        );
+        
+        const partnerSub = subscriptions.find(
+          (s: any) => !s.type
         );
 
-        const paidSub = subscriptions.find((s: any) =>
-          !s.type?.includes("trial")
-        );
-
-        setHasTrial(!!trialSub);
-        setHasPaid(!!paidSub);
+        const activeSub = paidSub ?? trialSub ?? partnerSub ?? null;
       
         setData({
           balance: result.balance,
+
           trial: trialSub
             ? {
                 ...trialSub,
@@ -112,11 +112,20 @@ export default function HomePageClient() {
                 daysLeft: getTimeLeft(trialSub.end_date),
               }
             : null,
+            
           paid: paidSub
             ? {
                 ...paidSub,
                 formattedDate: formatDate(paidSub.end_date),
                 daysLeft: getTimeLeft(paidSub.end_date),
+              }
+            : null,
+            
+          partner: partnerSub
+            ? {
+                ...partnerSub,
+                formattedDate: formatDate(partnerSub.end_date),
+                daysLeft: getTimeLeft(partnerSub.end_date),
               }
             : null,
         });
@@ -162,18 +171,18 @@ export default function HomePageClient() {
     });
   };
 
-  const subscriptionType: 'none' | 'trial' | 'paid' =
-          data?.paid ? 'paid'
-          : data?.trial ? 'trial'
-          : 'none';
-              
+  const subscriptionType: 'none' | 'trial' | 'paid' | 'partner' =
+      data?.paid ? 'paid'
+      : data?.trial ? 'trial'
+      : data?.partner ? 'partner'
+      : 'none';
+            
+
   const activeSubscription =
-    data?.paid ?? data?.trial ?? null;
+  data?.paid ?? data?.trial ?? data?.partner ?? null;
 
   const activeKey =
-    data?.paid?.subscription_key ??
-    data?.trial?.subscription_key ??
-    null;
+    activeSubscription?.subscription_key ?? null;
 
   return (
     <motion.div id='root' className='root' initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -212,6 +221,8 @@ export default function HomePageClient() {
                     ? "Текущая подписка"
                     : subscriptionType === 'trial'
                     ? "Бесплатный период"
+                    : subscriptionType === 'partner'
+                    ? "Партнёрский доступ"
                     : "Подписка отсутствует"
                 }
                 status={activeSubscription?.status ?? 'INACTIVE'}

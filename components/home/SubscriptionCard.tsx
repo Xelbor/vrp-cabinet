@@ -16,10 +16,10 @@ interface Props {
   daysLeft?: string;
   trafficUsed?: number;
   isLoading: boolean;
-  subscriptionType: 'none' | 'trial' | 'paid';
+  subscriptionType: 'none' | 'trial' | 'paid' | 'partner';
 }
 
-function renderActionButton(type: 'none' | 'trial' | 'paid') {
+function renderActionButton(type: 'none' | 'trial' | 'paid' | 'partner') {
   switch (type) {
     case 'none':
       return (
