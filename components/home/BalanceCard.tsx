@@ -10,7 +10,7 @@ interface Props {
   isLoading: boolean;
 }
 
-export function BalanceCard({ balance, isLoading }: Props) {
+export function BalanceCard({ balance = 0, isLoading }: Props) {
   return (
     <Card className="bg-zinc-900 border-zinc-800 shadow-xl rounded-2xl z-1">
         <CardHeader className="px-4">

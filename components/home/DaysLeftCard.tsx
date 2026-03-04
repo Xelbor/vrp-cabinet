@@ -8,7 +8,7 @@ interface Props {
   isLoading: boolean;
 }
 
-export function DaysLeftCard({ daysLeft, isLoading }: Props) {
+export function DaysLeftCard({ daysLeft = 0, isLoading }: Props) {
   return (
     <Card className="bg-zinc-900 border-zinc-800 shadow-xl rounded-2xl z-1 h-full">
       <CardHeader className="px-4">
