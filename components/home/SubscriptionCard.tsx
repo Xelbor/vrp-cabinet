@@ -32,7 +32,7 @@ function renderActionButton(type: 'none' | 'trial' | 'paid' | 'partner') {
 
     case 'trial':
       return (
-        <Button variant="secondary" className="w-full rounded-xl">
+        <Button variant="secondary" className="w-full rounded-xl cursor-pointer">
           Перейти на платный тариф
         </Button>
       );

@@ -243,7 +243,7 @@ export default function HomePageClient() {
     
             <motion.div whileHover={{ scale: 1.01 }}>
               <DevicesCard 
-                devices={data?.paid?.devices?.devices ?? []}
+                devices={activeSubscription?.devices?.devices ?? []}
                 isLoading={isLoading}
                 onDelete={handleDelete}
               />
