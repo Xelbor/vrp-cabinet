@@ -39,7 +39,7 @@ export default function HomePageClient() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     const tg = window.Telegram?.WebApp;
     if (!tg) return;
     
@@ -182,8 +182,8 @@ export default function HomePageClient() {
     data?.paid ?? data?.trial ?? null;
 
   const activeKey =
-    data?.paid?.subscription_key ??
-    data?.trial?.subscription_key ??
+    data?.paid?.link ??
+    data?.trial?.link ??
     null;
 
   return (
