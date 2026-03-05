@@ -207,7 +207,7 @@ export default function HomePageClient() {
     
               <motion.div whileHover={{ scale: 1.02 }}>
                 <DaysLeftCard 
-                  daysLeft={data?.daysLeft}
+                  daysLeft={activeSubscription?.daysLeft}
                   isLoading={isLoading}
                 />
               </motion.div>
