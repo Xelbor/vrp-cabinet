@@ -39,8 +39,17 @@ export default function HomePageClient() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    
+    const tg = window.Telegram?.WebApp;
+    if (!tg) return;
+    
+    tg.ready();
 
-    const initDataRaw = 'tg.initData';
+    if (tg.platform === "android" || tg.platform === "ios") {
+      tg.expand();
+    }
+    
+    const initDataRaw = tg.initData;
     if (!initDataRaw) {
       console.error("No initData");
       setError("No initData");
