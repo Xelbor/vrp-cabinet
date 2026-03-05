@@ -77,7 +77,7 @@ export default function HomePageClient() {
       try {
         setIsLoading(true);
 
-        const result = await fetchAPI('http://localhost/api/home', {
+        const result = await fetchAPI('/api/home', {
           method: 'POST',
           body: JSON.stringify({})
         });

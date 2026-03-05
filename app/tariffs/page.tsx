@@ -13,8 +13,11 @@ import { toast } from "sonner";
 export default function TariffsPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isSended, setSended] = useState<boolean>(false);
 
   const handleBuyKey = (plan: string) => {
+    if (isSended) { return };
+
     setErrorMsg(null);
     setLoading(true);
     
@@ -34,6 +37,7 @@ export default function TariffsPage() {
         })
         .finally(() => {
           setLoading(false);
+          setSended(false);
         }),
       {
         loading: "Оформление тарифа...",
