@@ -24,8 +24,8 @@ export default function BalancePage() {
   const [selected, setSelected] = useState<"bank_card" | "sbp" | null>(null);
   const [error_amount_msg, setAmountError] = useState("");
   const [error_method_msg, setMethodError] = useState("");
-  const content = false;
 
+  const [isSended, setSended] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>(null);
 
@@ -75,6 +75,8 @@ export default function BalancePage() {
     }
 
     try {
+      if (isSended) { return };
+      
       const result = await fetchAPI('/api/chargeBalance', {
         method: 'POST',
         body: JSON.stringify({ 

@@ -96,9 +96,7 @@ export function DevicesCard({ devices, isLoading, onDelete }: Props) {
 
                             <DrawerFooter className="mt-6 px-4 space-y-3">
                                 <DrawerClose asChild>
-                                <Button
-                                    className="h-12 text-base rounded-2xl cursor-pointer"
-                                >
+                                <Button className="h-12 text-base rounded-2xl cursor-pointer">
                                     Готово
                                 </Button>
                                 </DrawerClose>
