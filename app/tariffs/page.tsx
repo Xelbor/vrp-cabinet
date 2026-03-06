@@ -7,6 +7,7 @@ import { SquarePlus } from 'lucide-react';
 import { useState } from 'react';
 import { Separator } from "@/components/ui/separator";
 import { fetchAPI } from "@/lib/services/fetchAPI";
+import { formatValue } from "@/lib/formatters";
 import { toast } from "sonner";
 
 
@@ -64,14 +65,17 @@ export default function TariffsPage() {
 
                   <div className="flex flex-col border bg-zinc-800 transition rounded-xl px-4 py-4 border-zinc-700 hover:border-white/40 hover:bg-zinc-700/40">
                     <div className="flex flex-col gap-2">
-                      <div className="text-white text-2xl">Бесплатный период</div>
+                      <div className="text-white text-2xl">{process.env.NEXT_PUBLIC_TARIFF_1_TITLE}</div>
                       <div className="text-xs text-zinc-400">
-                        Оформите бесплатный период на 15 дней!
+                        Оформите бесплатный период на {process.env.NEXT_PUBLIC_TARIFF_1_DAYS} дней!
                       </div>
 
                       <div className="flex justify-between text-sm mt-2">
-                        <span>3 устройства</span>
-                        <span>∞ трафик</span>
+                        <span>{formatValue(process.env.NEXT_PUBLIC_TARIFF_1_DEVICES!, 'devices')}</span>
+                        <div className="flex flex-col items-end">
+                          <span>{formatValue(process.env.NEXT_PUBLIC_TARIFF_1_TRAFFIC!, 'traffic')} GB трафика</span>
+                          <span className="text-xs text-zinc-500">на месяц</span>
+                        </div>
                       </div>
                   
                       <Separator />
@@ -88,20 +92,23 @@ export default function TariffsPage() {
 
                   <div className="flex flex-col border bg-zinc-800 transition rounded-xl px-4 py-4 border-zinc-700 hover:border-white/40 hover:bg-zinc-700/40">
                     <div className="flex flex-col gap-2">
-                      <div className="text-white text-2xl">Тариф "Старт"</div>
+                      <div className="text-white text-2xl">{process.env.NEXT_PUBLIC_TARIFF_2_TITLE}</div>
                       <div className="text-xs text-zinc-400">
-                        Тариф на 14 дней
+                        Тариф на {process.env.NEXT_PUBLIC_TARIFF_2_DAYS} дней
                       </div>
 
                       <div className="flex justify-between text-sm mt-2">
-                        <span>3 устройства</span>
-                        <span>∞ трафик</span>
+                        <span>{formatValue(process.env.NEXT_PUBLIC_TARIFF_2_DEVICES!, 'devices')}</span>
+                        <div className="flex flex-col items-end">
+                          <span>{formatValue(process.env.NEXT_PUBLIC_TARIFF_2_TRAFFIC!, 'traffic')} GB трафика</span>
+                          <span className="text-xs text-zinc-500">на месяц</span>
+                        </div>
                       </div>
                   
                       <Separator />
 
                       <div className="my-1">
-                        <p className="text-2xl">85<span className='font-mono font-bold'>₽</span> / месяц</p>
+                        <p className="text-2xl">{process.env.NEXT_PUBLIC_TARIFF_2_AMOUNT}<span className='font-mono font-bold'>₽</span> / месяц</p>
                       </div>
                   
                       <Button onClick={() => handleBuyKey("paid_1")} className="w-full cursor-pointer">
@@ -112,20 +119,23 @@ export default function TariffsPage() {
 
                   <div className="flex flex-col border bg-zinc-800 transition rounded-xl px-4 py-4 border-zinc-700 hover:border-white/40 hover:bg-zinc-700/40">
                     <div className="flex flex-col gap-2">
-                      <div className="text-white text-2xl">30 дней</div>
+                      <div className="text-white text-2xl">{process.env.NEXT_PUBLIC_TARIFF_3_TITLE}</div>
                       <div className="text-xs text-zinc-400">
-                        Тариф на 30 дней
+                        Тариф на {process.env.NEXT_PUBLIC_TARIFF_3_DAYS} дней
                       </div>
 
                       <div className="flex justify-between text-sm mt-2">
-                        <span>3 устройства</span>
-                        <span>∞ трафик</span>
+                        <span>{formatValue(process.env.NEXT_PUBLIC_TARIFF_3_DEVICES!, 'devices')} устройств</span>
+                        <div className="flex flex-col items-end">
+                          <span>{formatValue(process.env.NEXT_PUBLIC_TARIFF_3_TRAFFIC!, 'traffic')} GB трафика</span>
+                          <span className="text-xs text-zinc-500">на месяц</span>
+                        </div>
                       </div>
                   
                       <Separator />
 
                       <div className="my-1">
-                        <p className="text-2xl">150<span className='font-mono font-bold'>₽</span> / месяц</p>
+                        <p className="text-2xl">{process.env.NEXT_PUBLIC_TARIFF_3_AMOUNT}<span className='font-mono font-bold'>₽</span> / месяц</p>
                       </div>
                   
                       <Button onClick={() => handleBuyKey("paid_2")} className="w-full cursor-pointer">
@@ -136,20 +146,23 @@ export default function TariffsPage() {
 
                   <div className="flex flex-col border bg-zinc-800 transition rounded-xl px-4 py-4 border-zinc-700 hover:border-white/40 hover:bg-zinc-700/40">
                     <div className="flex flex-col gap-2">
-                      <div className="text-white text-2xl">2 месяца</div>
+                      <div className="text-white text-2xl">{process.env.NEXT_PUBLIC_TARIFF_4_TITLE}</div>
                       <div className="text-xs text-zinc-400">
-                        Тариф на 60 дней
+                        Тариф на {process.env.NEXT_PUBLIC_TARIFF_4_DAYS} дней
                       </div>
 
                       <div className="flex justify-between text-sm mt-2">
-                        <span>3 устройства</span>
-                        <span>∞ трафик</span>
+                        <span>{formatValue(process.env.NEXT_PUBLIC_TARIFF_4_DEVICES!, 'devices')} устройств</span>
+                        <div className="flex flex-col items-end">
+                          <span>{formatValue(process.env.NEXT_PUBLIC_TARIFF_4_TRAFFIC!, 'traffic')} GB трафика</span>
+                          <span className="text-xs text-zinc-500">на месяц</span>
+                        </div>
                       </div>
                   
                       <Separator />
 
                       <div className="my-1">
-                        <p className="text-2xl">270<span className='font-mono font-bold'>₽</span> / месяц</p>
+                        <p className="text-2xl">{process.env.NEXT_PUBLIC_TARIFF_4_AMOUNT}<span className='font-mono font-bold'>₽</span> / месяц</p>
                       </div>
                   
                       <Button onClick={() => handleBuyKey("paid_3")} className="w-full cursor-pointer">
