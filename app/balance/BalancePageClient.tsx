@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CollapsibleNew } from "@/components/ui/collapsible-new";
+import Link from 'next/link';
 import { Wallet, CreditCard  } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { fetchAPI } from "@/lib/services/fetchAPI";
@@ -180,6 +180,12 @@ export default function BalancePage() {
                       </div>
                     </div>
                     <span className="text-xs text-red-500">{error_method_msg}</span>
+                  </div>
+
+                  <div>
+                    <span className="text-xs text-zinc-400">
+                      Нажимая кнопку "Оплатить", вы соглашаетесь с <Link href="https://vrp-vpn.online/terms.html" className="underline text-blue-500">Пользовательским соглашением</Link> и <Link href="https://vrp-vpn.online/privacy.html" className="underline text-blue-500">Политикой конфиденциальности</Link>.
+                    </span>
                   </div>
                   
                   <Button type="submit" className="w-full rounded-xl cursor-pointer">
