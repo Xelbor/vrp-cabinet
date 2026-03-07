@@ -228,6 +228,7 @@ export default function HomePageClient() {
                 status={activeSubscription?.status ?? 'INACTIVE'}
                 endDate={activeSubscription?.formattedDate}
                 daysLeft={activeSubscription?.daysLeft}
+                trafficLimit={activeSubscription?.traffic_limit}
                 trafficUsed={activeSubscription?.traffic}
                 isLoading={isLoading}
                 subscriptionType={subscriptionType}
