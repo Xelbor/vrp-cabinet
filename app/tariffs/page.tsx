@@ -7,7 +7,7 @@ import { SquarePlus } from 'lucide-react';
 import { useState } from 'react';
 import { Separator } from "@/components/ui/separator";
 import { fetchAPI } from "@/app/utils/fetchAPI";
-import { formatValue } from "@/lib/formatters";
+import { formatValue } from "@/app/utils/formatters";
 import { toast } from "sonner";
 
 
