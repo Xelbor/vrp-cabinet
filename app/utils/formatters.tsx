@@ -2,10 +2,11 @@
 
 import { DiApple, DiAndroid, DiWindows, DiLinux } from "react-icons/di";
 
-export const bytesToGiB = (value: number): string => {
-  if (value === 0) return '∞';
+export const bytesToGiB = (value: number, allowInfinity: boolean = false): string => {
+  if (allowInfinity && value === 0) return '∞';
   
-  return (value / (1024 ** 3)).toFixed(2);
+  const result = value / (1024 ** 3);
+  return result.toFixed(2);
 }
 
 export function formatValue(value: string | number, type: 'devices' | 'traffic' | 'days'): string {
