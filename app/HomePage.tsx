@@ -245,6 +245,7 @@ export default function HomePageClient() {
             <motion.div whileHover={{ scale: 1.01 }}>
               <DevicesCard 
                 devices={activeSubscription?.devices?.devices ?? []}
+                devices_limit={activeSubscription?.devices_limit}
                 isLoading={isLoading}
                 onDelete={handleDelete}
                 hasPaid={subscriptionType === 'paid'}

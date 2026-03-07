@@ -25,12 +25,13 @@ interface Device {
 
 interface Props {
   devices: Device[];
+  devices_limit: number;
   isLoading: boolean;
   onDelete: (hwid: string) => void;
   hasPaid: boolean;
 }
 
-export function DevicesCard({ devices, isLoading, onDelete, hasPaid }: Props) {
+export function DevicesCard({ devices, devices_limit, isLoading, onDelete, hasPaid }: Props) {
     return (
         <Card className="bg-zinc-900 border-zinc-800 shadow-xl rounded-2xl">
             <CardHeader>
@@ -39,9 +40,9 @@ export function DevicesCard({ devices, isLoading, onDelete, hasPaid }: Props) {
                 </CardTitle>
                 <div className="flex justify-between text-xs text-zinc-500 mb-1">
                     <span>Использовано устройств</span>
-                    <span>{devices.length} / 3</span>
+                    <span>{devices.length} / {devices_limit}</span>
                 </div>
-                <Progress value={devices.length / 3 * 100} />
+                <Progress value={devices.length / devices_limit * 100} />
             </CardHeader>
             <CardContent className="space-y-4">
                 <Drawer>
@@ -70,9 +71,9 @@ export function DevicesCard({ devices, isLoading, onDelete, hasPaid }: Props) {
                             <div className="px-4 mb-4">
                               <div className="flex justify-between text-xs text-zinc-500 mb-1">
                                 <span>Использовано устройств</span>
-                                <span>{devices.length} / 3</span>
+                                <span>{devices.length} / {devices_limit}</span>
                               </div>
-                              <Progress value={devices.length / 3 * 100} />
+                              <Progress value={devices.length / devices_limit * 100} />
                             </div>
 
                             {!hasPaid ? (
