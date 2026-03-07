@@ -120,7 +120,7 @@ export function SubscriptionCard({ label, status, endDate, daysLeft, trafficUsed
             <span className="text-zinc-500">—</span>
           ) : (
             <p className="font-bold">
-              {bytesToGiB(trafficUsed)} / {bytesToGiB(trafficLimit)} GB
+              {bytesToGiB(trafficUsed)} / {trafficLimit === 0 ? '∞' : bytesToGiB(trafficLimit)} GB
             </p>
           )}
         </div>
