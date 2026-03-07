@@ -27,9 +27,10 @@ interface Props {
   devices: Device[];
   isLoading: boolean;
   onDelete: (hwid: string) => void;
+  hasPaid: boolean;
 }
 
-export function DevicesCard({ devices, isLoading, onDelete }: Props) {
+export function DevicesCard({ devices, isLoading, onDelete, hasPaid }: Props) {
     return (
         <Card className="bg-zinc-900 border-zinc-800 shadow-xl rounded-2xl">
             <CardHeader>
@@ -74,25 +75,39 @@ export function DevicesCard({ devices, isLoading, onDelete }: Props) {
                               <Progress value={devices.length / 3 * 100} />
                             </div>
 
-                            <div className="space-y-2 px-4">
-                              {devices.map((device, index) => (
-                                <Card
-                                  key={index}
-                                  className="bg-zinc-900/70 border border-zinc-800 rounded-xl px-3 py-2 hover:bg-zinc-800/70 transition"
-                                >
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                      {definePlatformIcon(device.platform)}
-                                      <span className="text-sm font-medium text-white">
-                                        {device.device_model}
-                                      </span>
+                            {!hasPaid ? (
+                              <div className="px-4 text-center py-8">
+                                <p className="text-zinc-400 text-sm">
+                                  Управление устройствами доступно только на платном тарифе
+                                </p>
+
+                                <p className="text-zinc-500 text-xs mt-2">
+                                  Обновите подписку чтобы удалять устройства
+                                </p>
+                              </div>
+
+                            ) : (
+                              
+                              <div className="space-y-2 px-4">
+                                {devices.map((device, index) => (
+                                  <Card
+                                    key={index}
+                                    className="bg-zinc-900/70 border border-zinc-800 rounded-xl px-3 py-2 hover:bg-zinc-800/70 transition"
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <div className="flex items-center gap-2">
+                                        {definePlatformIcon(device.platform)}
+                                        <span className="text-sm font-medium text-white">
+                                          {device.device_model}
+                                        </span>
+                                      </div>
+                                
+                                      <DeleteButton onClick={() => onDelete(device.hwid_uuid)} />
                                     </div>
-                            
-                                    <DeleteButton onClick={() => onDelete(device.hwid_uuid)} />
-                                  </div>
-                                </Card>
-                              ))}
-                            </div>
+                                  </Card>
+                                ))}
+                              </div>
+                            )}
 
                             <DrawerFooter className="mt-6 px-4 space-y-3">
                                 <DrawerClose asChild>

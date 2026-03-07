@@ -247,6 +247,7 @@ export default function HomePageClient() {
                 devices={activeSubscription?.devices?.devices ?? []}
                 isLoading={isLoading}
                 onDelete={handleDelete}
+                hasPaid={subscriptionType === 'paid'}
               />
             </motion.div>
           </div>
