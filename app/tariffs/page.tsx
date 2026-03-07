@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { SquarePlus } from 'lucide-react';
 import { useState } from 'react';
 import { Separator } from "@/components/ui/separator";
-import { fetchAPI } from "@/lib/services/fetchAPI";
+import { fetchAPI } from "@/app/utils/fetchAPI";
 import { formatValue } from "@/lib/formatters";
 import { toast } from "sonner";
 

@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/ui/delete-button";
 import { Progress } from "@/components/ui/progress";
 import { Globe } from 'lucide-react';
-import { definePlatformIcon } from '@/lib/format';
+import { definePlatformIcon } from '@/app/utils/formatters';
 
 interface Device {
   platform: string;

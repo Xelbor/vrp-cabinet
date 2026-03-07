@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import Link from 'next/link';
 import { Wallet, CreditCard  } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { fetchAPI } from "@/lib/services/fetchAPI";
+import { fetchAPI } from "@/app/utils/fetchAPI";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,

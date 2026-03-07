@@ -7,8 +7,8 @@ import { SubscriptionKeyCard } from '@/components/home/SubscriptionKeyCard';
 import { DevicesCard } from '@/components/home/DevicesCard';
 import { DaysLeftCard } from '@/components/home/DaysLeftCard';
 import { motion } from "framer-motion";
-import { fetchAPI } from "@/lib/services/fetchAPI";
-import { formatDate, getTimeLeft } from '@/lib/date';
+import { fetchAPI } from "@/app/utils/fetchAPI";
+import { formatDate, getTimeLeft } from '@/app/utils/date';
 import { useEffect, useState } from 'react';
 
 export default function HomePageClient() {

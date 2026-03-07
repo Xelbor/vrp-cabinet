@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { fetchAPI } from "@/lib/services/fetchAPI";
+import { fetchAPI } from "@/app/utils/fetchAPI";
 import { CopyButton, HandleCopyText } from "@/components/ui/copy-button";
 import { CollapsibleNew } from "@/components/ui/collapsible-new";
 import { HandCoins, BookMarked, Link} from 'lucide-react';
