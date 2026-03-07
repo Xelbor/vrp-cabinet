@@ -15,6 +15,7 @@ interface Props {
   endDate?: string;
   daysLeft?: string;
   trafficUsed?: number;
+  trafficLimit?: number;
   isLoading: boolean;
   subscriptionType: 'none' | 'trial' | 'paid' | 'partner';
 }
@@ -61,7 +62,7 @@ function defineStatus(status: string ) {
   } 
 }
 
-export function SubscriptionCard({ label, status, endDate, daysLeft, trafficUsed = 0, isLoading, subscriptionType }: Props) {
+export function SubscriptionCard({ label, status, endDate, daysLeft, trafficUsed = 0, trafficLimit = 0, isLoading, subscriptionType }: Props) {
   const effectiveType = isLoading ? 'none' : subscriptionType;
 
   return (
@@ -119,7 +120,7 @@ export function SubscriptionCard({ label, status, endDate, daysLeft, trafficUsed
             <span className="text-zinc-500">—</span>
           ) : (
             <p className="font-bold">
-              {bytesToGiB(trafficUsed)} / ∞ GB
+              {bytesToGiB(trafficUsed)} / {bytesToGiB(trafficLimit)} GB
             </p>
           )}
         </div>
