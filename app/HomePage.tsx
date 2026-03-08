@@ -42,12 +42,8 @@ export default function HomePageClient() {
 
     const tg = window.Telegram?.WebApp;
     if (!tg) return;
-    
-    tg.ready();
 
-    if (tg.platform === "android" || tg.platform === "ios") {
-      tg.expand();
-    }
+    tg.ready();
     
     const initDataRaw = tg.initData;
     if (!initDataRaw) {
